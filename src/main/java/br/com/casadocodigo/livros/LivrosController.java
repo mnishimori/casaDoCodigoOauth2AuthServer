@@ -16,7 +16,7 @@ import br.com.casadocodigo.usuarios.Usuario;
 import br.com.casadocodigo.usuarios.Usuarios;
 
 @Controller
-@RequestMapping("/livros")
+@RequestMapping({"/livros", "/api/v2/livros"})
 public class LivrosController {
 
 	@Autowired

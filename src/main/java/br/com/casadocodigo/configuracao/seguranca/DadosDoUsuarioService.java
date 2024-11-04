@@ -18,9 +18,7 @@ public class DadosDoUsuarioService implements UserDetailsService {
 	private Usuarios usuarios;
 
 	@Override
-	public UserDetails loadUserByUsername(String email) 
-			throws UsernameNotFoundException {
-
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Optional<Usuario> usuario = usuarios.buscarPorEmail(email);
 		
 		if (usuario.isPresent()) {
@@ -29,5 +27,4 @@ public class DadosDoUsuarioService implements UserDetailsService {
 			throw new UsernameNotFoundException("usuario não autorizado");
 		}
 	}
-
 }
