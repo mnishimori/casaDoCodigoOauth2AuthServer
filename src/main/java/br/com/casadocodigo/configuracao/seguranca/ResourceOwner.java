@@ -1,11 +1,9 @@
 package br.com.casadocodigo.configuracao.seguranca;
 
+import br.com.casadocodigo.usuarios.Usuario;
 import java.util.Collection;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import br.com.casadocodigo.usuarios.Usuario;
 
 public class ResourceOwner implements UserDetails {
 

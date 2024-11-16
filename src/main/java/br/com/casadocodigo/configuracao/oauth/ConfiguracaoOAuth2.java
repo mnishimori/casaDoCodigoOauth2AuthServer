@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -39,6 +40,8 @@ public class ConfiguracaoOAuth2 {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -46,9 +49,10 @@ public class ConfiguracaoOAuth2 {
           .inMemory()
           .withClient("cliente-app")
           .secret("$2a$10$sTEY0A3Z3MdRZrJSRRDvhuOzm1q2gE.BKtX91MEvsm5XJtWPJZODu")
-          .authorizedGrantTypes("password", "authorization_code")
+          .authorizedGrantTypes("password", "authorization_code", "refresh_token")
+          .accessTokenValiditySeconds(120)
           .scopes("read", "write")
-          .redirectUris("http://localhost:9000/integracao/callback")
+          .redirectUris("http://localhost:9000/callback", "http://localhost:9000/integracao/callback")
           .resourceIds(RESOURCE_ID)
           .and()
           .withClient("cliente-admin")
@@ -60,7 +64,9 @@ public class ConfiguracaoOAuth2 {
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-      endpoints.authenticationManager(this.authenticationManager);
+      endpoints
+          .authenticationManager(this.authenticationManager)
+          .userDetailsService(this.userDetailsService);
     }
   }
 }
