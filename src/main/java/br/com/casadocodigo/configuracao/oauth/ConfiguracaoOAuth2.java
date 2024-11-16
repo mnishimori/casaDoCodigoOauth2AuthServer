@@ -46,8 +46,9 @@ public class ConfiguracaoOAuth2 {
           .inMemory()
           .withClient("cliente-app")
           .secret("$2a$10$sTEY0A3Z3MdRZrJSRRDvhuOzm1q2gE.BKtX91MEvsm5XJtWPJZODu")
-          .authorizedGrantTypes("password")
+          .authorizedGrantTypes("password", "authorization_code")
           .scopes("read", "write")
+          .redirectUris("http://localhost:9000/integracao/callback")
           .resourceIds(RESOURCE_ID);
     }
 
