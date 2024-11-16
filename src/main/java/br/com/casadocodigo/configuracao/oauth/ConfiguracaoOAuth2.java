@@ -49,6 +49,12 @@ public class ConfiguracaoOAuth2 {
           .authorizedGrantTypes("password", "authorization_code")
           .scopes("read", "write")
           .redirectUris("http://localhost:9000/integracao/callback")
+          .resourceIds(RESOURCE_ID)
+          .and()
+          .withClient("cliente-admin")
+          .secret("$2a$10$q5B3yLhM.H8gdwNmLxtQie.wga.noGT7x2AF3foEdnJKu1aJJ.iwW")
+          .authorizedGrantTypes("client_credentials")
+          .scopes("read")
           .resourceIds(RESOURCE_ID);
     }
 
