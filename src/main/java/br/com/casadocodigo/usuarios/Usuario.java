@@ -10,9 +10,11 @@ import javax.persistence.OneToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.casadocodigo.livros.Estante;
+import javax.persistence.Table;
 import lombok.Getter;
 
 @Entity
+@Table(name = "usuario")
 public class Usuario {
 
 	@Getter

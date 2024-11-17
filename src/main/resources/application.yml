@@ -12,15 +12,35 @@ oauth:
 ## configurações do datasource do spring
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/bookserver?createDatabaseIfNotExist=true&serverTimezone=UTC
-    username: root
-    password:
+    bookserver:
+      url: jdbc:mysql://localhost:3306/bookserver?createDatabaseIfNotExist=true&serverTimezone=UTC
+      username: root
+      password:
+      driverClassName: com.mysql.cj.jdbc.Driver
+    bookserver-oauth:
+      url: jdbc:mysql://localhost:3306/bookserver_oauth?createDatabaseIfNotExist=true&serverTimezone=UTC
+      username: root
+      password:
+      driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         show_sql: true
+        hibernate.format_sql: true
         hbm2ddl:
           auto: validate
-  flyway:
-    locations: classpath:db/migration
+flyway:
+  bookserver:
+    enabled: true
+    url: jdbc:mysql://localhost:3306/bookserver
+    user: root
+    password:
+    locations: classpath:db/migration/bookserver  # Caminho dos scripts de migração para datasource1
+
+  bookserver-oauth:
+    enabled: true
+    url: jdbc:mysql://localhost:3306/bookserver_oauth
+    user: root
+    password:
+    locations: classpath:db/migration/bookserver_oauth  # Caminho dos scripts de migração para datasource2

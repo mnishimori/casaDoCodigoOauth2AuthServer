@@ -14,10 +14,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import javax.persistence.Table;
 import lombok.Getter;
 import br.com.casadocodigo.usuarios.Usuario;
 
 @Entity
+@Table(name = "estante")
 public class Estante {
 
 	@Getter
