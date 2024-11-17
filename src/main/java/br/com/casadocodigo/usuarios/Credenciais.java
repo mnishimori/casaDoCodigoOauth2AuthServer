@@ -1,11 +1,12 @@
 package br.com.casadocodigo.usuarios;
 
+import java.io.Serializable;
 import javax.persistence.Embeddable;
 
 import lombok.Getter;
 
 @Embeddable
-public class Credenciais {
+public class Credenciais implements Serializable {
 
 	@Getter
 	private String email;

@@ -1,6 +1,9 @@
 package br.com.casadocodigo.configuracao.oauth;
 
+import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +15,12 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.approval.ApprovalStore;
+import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
+import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 @Configuration
 public class ConfiguracaoOAuth2 {
@@ -41,6 +50,40 @@ public class ConfiguracaoOAuth2 {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
+    private ClientDetailsService clientDetailsService;
+    @Autowired
+    @Qualifier("dataSourceBookServerOauth")
+    private DataSource dataSource;
+
+    @Bean
+    public TokenStore tokenStore() {
+      return new JdbcTokenStore(this.dataSource);
+    }
+
+    @Bean
+    public ApprovalStore approvalStore() {
+      return new JdbcApprovalStore(this.dataSource);
+    }
+
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+      clients.jdbc(this.dataSource);
+    }
+
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+      DefaultOAuth2RequestFactory requestFactory = new DefaultOAuth2RequestFactory(this.clientDetailsService);
+
+      endpoints
+          .authenticationManager(this.authenticationManager)
+          .requestFactory(requestFactory)
+          .approvalStore(approvalStore())
+          .tokenStore(tokenStore());
+    }
+
+    /*
+    Configuração em memória do client
+    @Autowired
     private UserDetailsService userDetailsService;
 
     @Override
@@ -68,5 +111,6 @@ public class ConfiguracaoOAuth2 {
           .authenticationManager(this.authenticationManager)
           .userDetailsService(this.userDetailsService);
     }
+     */
   }
 }
